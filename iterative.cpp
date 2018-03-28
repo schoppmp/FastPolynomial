@@ -86,20 +86,30 @@ void multipoint_evaluate_zp_iterative(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y)
 {
     // we want to recursive_evaluate_zp P on 'degree+1' values.
     ZZ_pX* p_tree = new ZZ_pX[degree*2+1];
+#ifndef NDEBUG
     steady_clock::time_point begin1 = steady_clock::now();
+#endif
     build_tree_zp_iterative(p_tree, X, degree * 2 + 1);
+#ifndef NDEBUG
     steady_clock::time_point end1 = steady_clock::now();
+#endif
 //    test_tree_zp_iterative(p_tree[0], x, degree+1);
 
     ZZ_pX* reminders = new ZZ_pX[degree*2+1];
+#ifndef NDEBUG
     steady_clock::time_point begin2 = steady_clock::now();
+#endif
     evaluate_zp_iterative(P, p_tree, reminders, degree * 2 + 1, Y);
+#ifndef NDEBUG
     chrono::steady_clock::time_point end2 = steady_clock::now();
+#endif
 //    test_evaluate_zp_iterative(P,x,y,degree+1);
 
+#ifndef NDEBUG
     cout << "Building tree: " << duration_cast<milliseconds>(end1 - begin1).count() << " ms" << endl;
     cout << "Evaluating points: " << duration_cast<milliseconds>(end2 - begin2).count() << " ms" << endl;
     cout << "Total: " << duration_cast<milliseconds>(end1 - begin1).count()+ duration_cast<milliseconds>(end2 - begin2).count() << " ms" << endl;
+#endif
 
     delete[] p_tree;
     delete[] reminders;
@@ -129,42 +139,62 @@ void interpolate_core_zp_iterative(ZZ_pX &resultP, ZZ_pX *temp, ZZ_p *Y, ZZ_p *a
 
 void interpolate_zp_iterative(long degree, ZZ_p* X, ZZ_p* Y, ZZ_pX& resultP)
 {
+#ifndef NDEBUG
     system_clock::time_point begin[4];
     system_clock::time_point end[4];
+#endif
 
     //we first build the tree of the super moduli
     ZZ_pX* M = new ZZ_pX[degree*2+1];
+#ifndef NDEBUG
     begin[0]= system_clock::now();
+#endif
     build_tree_zp_iterative(M, X, degree * 2 + 1);
+#ifndef NDEBUG
     end[0] = system_clock::now();
+#endif
 //    test_tree_zp_iterative(M[0], x, degree+1);
 
     //we construct a preconditioned global structure for the a_k for all 1<=k<=(degree+1)
     ZZ_p* a = new ZZ_p[degree+1];
     ZZ_pX D;
+#ifndef NDEBUG
     begin[1] = system_clock::now();
+#endif
     diff(D, M[0]);
+#ifndef NDEBUG
     end[1] = system_clock::now();
+#endif
 
     //recursive_evaluate_zp d(x) to obtain the results in the array a
     ZZ_pX* reminders = new ZZ_pX[degree*2+1];
+#ifndef NDEBUG
     begin[2] = system_clock::now();
+#endif
     evaluate_zp_iterative(D, M, reminders, degree * 2 + 1, a);
+#ifndef NDEBUG
     end[2] = system_clock::now();
+#endif
 //    test_evaluate_zp_iterative(D,x,a,degree+1);
 
     //now we can apply the formula
     ZZ_pX* temp = new ZZ_pX[degree*2+1];
+#ifndef NDEBUG
     begin[3] = system_clock::now();
+#endif
     interpolate_core_zp_iterative(resultP, temp, Y, a, M, degree * 2 + 1);
+#ifndef NDEBUG
     end[3] = system_clock::now();
+#endif
 
+#ifndef NDEBUG
     cout << " -- Iterative --" << endl<< endl;
     cout << "Building tree: " << duration_cast<milliseconds>(end[0] - begin[0]).count() << " ms" << endl;
     cout << "Differentiate: " << duration_cast<milliseconds>(end[1] - begin[1]).count() << " ms" << endl;
     cout << "Evaluate diff: " << duration_cast<milliseconds>(end[2] - begin[2]).count() << " ms" << endl;
     cout << "Interpolation: " << duration_cast<milliseconds>(end[3] - begin[3]).count() << " ms" << endl;
     cout << "Total: " << duration_cast<milliseconds>(end[0]-begin[0] + end[1]-begin[1] + end[2]-begin[2] + end[3]-begin[3]).count() << " ms" << endl;
+#endif
 
     delete[] M;
     delete[] a;
