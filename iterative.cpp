@@ -15,7 +15,7 @@ using namespace chrono;
 #define PAPA(X) ((X-1)/2)
 
 
-void build_tree_zp_iterative(ZZ_pX *tree, ZZ_p *points, unsigned int tree_size) {
+void build_tree_zp_iterative(ZZ_pX *tree, const ZZ_p *points, unsigned int tree_size) {
 
     ZZ_p negated;
     unsigned int i = tree_size-1;
@@ -49,7 +49,7 @@ void test_tree_zp_iterative(ZZ_pX &final_polynomial, ZZ_p *points, unsigned int 
         cout << "polynomials tree is correct." << endl;
 }
 
-void evaluate_zp_iterative(ZZ_pX &P, ZZ_pX *tree, ZZ_pX *reminders, unsigned int tree_size, ZZ_p *results) {
+void evaluate_zp_iterative(const ZZ_pX &P, ZZ_pX *tree, ZZ_pX *reminders, unsigned int tree_size, ZZ_p *results) {
 
     reminders[0] = P%tree[0];
 
@@ -82,7 +82,7 @@ void test_evaluate_zp_iterative(ZZ_pX &P, ZZ_p *points, ZZ_p *results, unsigned 
 }
 
 
-void multipoint_evaluate_zp_iterative(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y)
+void multipoint_evaluate_zp_iterative(long degree, const ZZ_pX &P, const ZZ_p *X, ZZ_p *Y)
 {
     // we want to recursive_evaluate_zp P on 'degree+1' values.
     ZZ_pX* p_tree = new ZZ_pX[degree*2+1];
@@ -119,7 +119,7 @@ void multipoint_evaluate_zp_iterative(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y)
 /*
  * expects an "empty" polynomial 'resultP'
  */
-void interpolate_core_zp_iterative(ZZ_pX &resultP, ZZ_pX *temp, ZZ_p *Y, ZZ_p *a, ZZ_pX *M, unsigned int tree_size)
+void interpolate_core_zp_iterative(ZZ_pX &resultP, ZZ_pX *temp, const ZZ_p *Y, ZZ_p *a, ZZ_pX *M, unsigned int tree_size)
 {
     unsigned int i = tree_size-1;
     ZZ_p inv_a;
@@ -137,7 +137,7 @@ void interpolate_core_zp_iterative(ZZ_pX &resultP, ZZ_pX *temp, ZZ_p *Y, ZZ_p *a
     resultP = temp[LEFT(0)] * M[RIGHT(0)] + temp[RIGHT(0)] * M[LEFT(0)] ;
 }
 
-void interpolate_zp_iterative(long degree, ZZ_p* X, ZZ_p* Y, ZZ_pX& resultP)
+void interpolate_zp_iterative(long degree, const ZZ_p* X, const ZZ_p* Y, ZZ_pX& resultP)
 {
 #ifndef NDEBUG
     system_clock::time_point begin[4];
@@ -218,14 +218,14 @@ void test_interpolation_result_zp_iterative(long degree, ZZ_p *x, ZZ_p *y, ZZ_pX
 }
 
 
-void poly_interpolate_zp_iterative(long degree, ZZ_p *X, ZZ_p *Y, ZZ_pX &P){
+void poly_interpolate_zp_iterative(long degree, const ZZ_p *X, const ZZ_p *Y, ZZ_pX &P){
 
     interpolate_zp_iterative(degree, X, Y, P);
     //the next operation takes O(n^2) time, keep it commented out!
 //    test_interpolation_result_zp_iterative(degree, X, Y, P);
 }
 
-void poly_evaluate_zp_iterative(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y){
+void poly_evaluate_zp_iterative(long degree, const ZZ_pX &P, const ZZ_p *X, ZZ_p *Y){
     multipoint_evaluate_zp_iterative(degree, P, X, Y);
     //the next operation takes O(n^2) time, keep it commented out!
 //    test_evaluate_zp_iterative(P, X, Y, degree + 1);

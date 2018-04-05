@@ -12,9 +12,9 @@
 #include <sys/resource.h>
 
 
-void poly_interpolate_zp_recursive(long degree, NTL::ZZ_p *X, NTL::ZZ_p *Y, NTL::ZZ_pX &P);
+void poly_interpolate_zp_recursive(long degree, const NTL::ZZ_p *X, const NTL::ZZ_p *Y, NTL::ZZ_pX &P);
 
-void poly_evaluate_zp_recursive(long degree, NTL::ZZ_pX &P, NTL::ZZ_p *X, NTL::ZZ_p *Y);
+void poly_evaluate_zp_recursive(long degree, const NTL::ZZ_pX &P, const NTL::ZZ_p *X, NTL::ZZ_p *Y);
 
 
 

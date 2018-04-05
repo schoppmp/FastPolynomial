@@ -15,7 +15,7 @@ using namespace chrono;
  'tree_size' is the number of nodes (including leaves) in the tree = 2*(degree+1)-1 = 2*degree+1
  'root' is the index of the subtree in the array 'tree'
  */
-void build_tree (ZZ_pX* tree, ZZ_p* points, unsigned int root, unsigned int tree_size) {
+void build_tree (ZZ_pX* tree, const ZZ_p* points, unsigned int root, unsigned int tree_size) {
     // halting condition
     if(LEFT(root)>=tree_size) {
         unsigned int point_index = root-(tree_size-1)/2;
@@ -54,7 +54,7 @@ void test_tree(ZZ_pX &final_polynomial, ZZ_p *points, unsigned int npoints) {
  * tree size - the size of a complete tree is 2*n-1 where n is the number of leafs
  * results - the evaluation result over the x's (that are represented by the tree)
  */
-void recursive_evaluate_zp(ZZ_pX &P, ZZ_pX *tree, unsigned int root, unsigned int tree_size, ZZ_p *results) {
+void recursive_evaluate_zp(const ZZ_pX &P, ZZ_pX *tree, unsigned int root, unsigned int tree_size, ZZ_p *results) {
     // halting condition
     if(LEFT(root)>=tree_size) {
         ZZ_pX R = P%tree[root];
@@ -86,7 +86,7 @@ void test_evaluate_zp_recursive(ZZ_pX &P, ZZ_p *points, ZZ_p *results, unsigned 
 }
 
 
-void multipoint_evaluate_zp_recursive(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y)
+void multipoint_evaluate_zp_recursive(long degree, const ZZ_pX &P, const ZZ_p *X, ZZ_p *Y)
 {
     // we want to recursive_evaluate_zp P on 'degree+1' values.
     ZZ_pX* p_tree = new ZZ_pX[degree*2+1];
@@ -142,7 +142,7 @@ void multipoint_evaluate_zp_recursive(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y)
 /*
  * expects an "empty" polynomial 'resultP'
  */
-void recursive_interpolate_zp(ZZ_pX& resultP, unsigned int root, ZZ_p* x, ZZ_p* y, ZZ_p* a, ZZ_pX* M, unsigned int tree_size)
+void recursive_interpolate_zp(ZZ_pX& resultP, unsigned int root, const ZZ_p* x, const ZZ_p* y, ZZ_p* a, ZZ_pX* M, unsigned int tree_size)
 {
     // halting condition
     if(LEFT(root)>=tree_size) {
@@ -163,7 +163,7 @@ void recursive_interpolate_zp(ZZ_pX& resultP, unsigned int root, ZZ_p* x, ZZ_p* 
 /*
  * We follow the algorithm and notation as in Moneck & Borodin '73
  */
-void interpolate_zp(long degree, ZZ_p* X, ZZ_p* Y, ZZ_pX& resultP)
+void interpolate_zp(long degree, const ZZ_p* X, const ZZ_p* Y, ZZ_pX& resultP)
 {
 #ifndef NDEBUG
     system_clock::time_point begin[4];
@@ -238,14 +238,14 @@ void test_interpolation_result_zp_recursive(long degree, ZZ_p* X, ZZ_p* Y,ZZ_pX&
 }
 
 
-void poly_interpolate_zp_recursive(long degree, ZZ_p *X, ZZ_p *Y, ZZ_pX &P){
+void poly_interpolate_zp_recursive(long degree, const ZZ_p *X, const ZZ_p *Y, ZZ_pX &P){
 
     interpolate_zp(degree, X, Y, P);
     //the next operation takes O(n^2) time, keep it commented out!
 //    test_interpolation_result_zp_recursive(degree, X, Y, P);
 }
 
-void poly_evaluate_zp_recursive(long degree, ZZ_pX &P, ZZ_p *X, ZZ_p *Y){
+void poly_evaluate_zp_recursive(long degree, const ZZ_pX &P, const ZZ_p *X, ZZ_p *Y){
     multipoint_evaluate_zp_recursive(degree, P, X, Y);
     //the next operation takes O(n^2) time, keep it commented out!
 //    test_evaluate_zp_recursive(P,X,Y,degree+1);
