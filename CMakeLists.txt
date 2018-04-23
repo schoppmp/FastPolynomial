@@ -17,4 +17,4 @@ add_executable(test_fastpoly main.cpp)
 
 target_link_libraries(test_fastpoly fastpoly)
 target_link_libraries(test_fastpoly ntl)
-target_link_libraries(test_fastpoly gmp gmpxx)
+target_link_libraries(test_fastpoly gmp gmpxx pthread)
