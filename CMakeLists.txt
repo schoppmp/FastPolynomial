@@ -9,7 +9,7 @@ endif()
 
 set(CMAKE_CXX_FLAGS "-Wall")
 
-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-g -O3 -DNDEBUG")
 
 add_library(fastpoly recursive.cpp recursive.h utils.cpp utils.h iterative.cpp iterative.h)
 

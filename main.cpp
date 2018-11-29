@@ -16,10 +16,10 @@ using namespace chrono;
 //#define ITERATIVE
 
 void usage_example_zp(){
-    long degree = pow(2,13)-1;
+    long degree = pow(2,20)-1;
 
     ZZ prime;
-    GenPrime(prime, 400);
+    GenPrime(prime, 128);
     ZZ_p::init(prime);
 
 //  interpolation points:
