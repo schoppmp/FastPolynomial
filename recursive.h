@@ -1,21 +1,16 @@
-
-
 #ifndef FASTPOLY_RECURSIVE_H
 #define FASTPOLY_RECURSIVE_H
 
-#include <NTL/ZZ_p.h>
-#include <NTL/vec_ZZ_p.h>
-#include <NTL/ZZ_pX.h>
-#include <NTL/ZZ.h>
+namespace fastpoly {
 
-#include <chrono>
-#include <sys/resource.h>
+template<typename ElementType, typename PolynomialType>
+void poly_interpolate_zp_recursive(long degree, const ElementType *X,
+                                   const ElementType *Y, PolynomialType &P);
 
+template<typename ElementType, typename PolynomialType>
+void poly_evaluate_zp_recursive(long degree, const PolynomialType &P,
+                                const ElementType *X, ElementType *Y);
 
-void poly_interpolate_zp_recursive(long degree, const NTL::ZZ_p *X, const NTL::ZZ_p *Y, NTL::ZZ_pX &P);
-
-void poly_evaluate_zp_recursive(long degree, const NTL::ZZ_pX &P, const NTL::ZZ_p *X, NTL::ZZ_p *Y);
-
-
+}
 
 #endif //FASTPOLY_RECURSIVE_H

@@ -3,16 +3,14 @@
 #include <cmath>
 #include <NTL/ZZ.h>
 
-
-using namespace std;
-using namespace NTL;
-
 #include "iterative.h"
 #include "recursive.h"
 
 using namespace std;
 using namespace NTL;
 using namespace chrono;
+
+using namespace fastpoly;
 
 //#define ITERATIVE
 
